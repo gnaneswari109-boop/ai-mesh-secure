@@ -5,9 +5,11 @@ services:
     build: .
     ports:
       - "8000:8000"
-      - "50051:50051"
     environment:
+      APP_NAME: ai-mesh-secure
       REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: sqlite:///./ai_mesh.db
+      DEBUG: "true"
     depends_on:
       - redis
 

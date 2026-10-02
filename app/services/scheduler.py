@@ -10,6 +10,7 @@ def add_task(task_id: str, name: str, capability: str, dependencies: Optional[Li
         "capability": capability,
         "dependencies": dependencies or [],
         "status": "pending",
+        "result": None,
     }
 
 
@@ -21,6 +22,11 @@ def ready_tasks():
     ]
 
 
-def mark_task_done(task_id: str):
+def mark_task_done(task_id: str, result: dict):
     if task_id in TASK_GRAPH:
         TASK_GRAPH[task_id]["status"] = "completed"
+        TASK_GRAPH[task_id]["result"] = result
+
+
+def list_tasks():
+    return list(TASK_GRAPH.values())

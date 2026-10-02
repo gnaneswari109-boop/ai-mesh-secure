@@ -1,0 +1,58 @@
+# proto/mesh.proto
+syntax = "proto3";
+
+service MeshService {
+  rpc RegisterAgent (AgentInfo) returns (AgentReply);
+  rpc PairAgents (PairRequest) returns (PairReply);
+  rpc SubmitTask (TaskRequest) returns (TaskReply);
+  rpc SendMessage (Message) returns (MessageReply);
+}
+
+message AgentInfo {
+  string agent_id = 1;
+  repeated string capabilities = 2;
+  string public_key = 3;
+}
+
+message AgentReply {
+  bool success = 1;
+  string message = 2;
+}
+
+message PairRequest {
+  string agent_a = 1;
+  string agent_b = 2;
+}
+
+message PairReply {
+  bool success = 1;
+  string session_id = 2;
+}
+
+message TaskRequest {
+  string task_id = 1;
+  string name = 2;
+  string capability = 3;
+  repeated string dependencies = 4;
+}
+
+message TaskReply {
+  bool success = 1;
+  string task_id = 2;
+  string status = 3;
+}
+
+message Message {
+  string message_id = 1;
+  string sender = 2;
+  string receiver = 3;
+  string session_id = 4;
+  string action = 5;
+  string payload = 6;
+  string signature = 7;
+}
+
+message MessageReply {
+  bool accepted = 1;
+  string status = 2;
+}

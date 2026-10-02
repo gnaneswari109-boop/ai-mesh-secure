@@ -1,14 +1,20 @@
-from pydantic import BaseModel, Field
-from typing import Optional, List, Dict, Any
+from pydantic import BaseModel
+from typing import List, Dict, Any, Optional
 
 
 class AgentSchema(BaseModel):
     agent_id: str
     capabilities: List[str]
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: Dict[str, Any] = {}
 
 
-class PairingRequest(BaseModel):
+class AgentRegisterRequest(BaseModel):
+    agent_id: str
+    capabilities: List[str]
+    public_key: Optional[str] = None
+
+
+class PairRequest(BaseModel):
     agent_a: str
     agent_b: str
 

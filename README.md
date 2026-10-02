@@ -1,60 +1,77 @@
 # AI Mesh Secure
 
-Secure Bluetooth-like multi-agent AI mesh with:
-- FastAPI API
+The AI Mesh Secure project is a production-ready prototype for a Bluetooth-like multi-agent architecture.
+
+It includes:
+- FastAPI REST API
 - Redis event bus
-- gRPC inter-agent protocol
+- agent registry and discovery
+- secure pairing with session secrets
 - signed message verification
-- session pairing
 - task DAG orchestration
-- shared memory
-- deployment-ready Docker config
+- memory tracking
+- Docker deployment
+- gRPC protocol design for inter-agent communication
 
-## Features
+## Architecture
 
-- Agent discovery and capability registration
-- Secure pairing between agents
-- Signed live message exchange
-- gRPC service for agent communication
-- Redis event-driven state propagation
-- Multi-agent task orchestration
-- Context memory and result aggregation
+- Agent discovery
+- Session pairing and trust creation
+- Secure message signing
+- Task DAG scheduling
+- Shared memory
+- Result aggregation
+- Event-driven messaging
 
-## Quick start
+## Run locally
 
 ```bash
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
+cp .env.example .env
 uvicorn app.main:app --reload
 ```
 
-For gRPC service:
+## Run with Docker
 
 ```bash
-python -m app.grpc_server
+docker-compose up --build
 ```
 
-## API examples
+## Endpoints
 
-Register agent:
+- POST /agents/register
+- GET /agents
+- GET /agents/capabilities/{capability}
+- POST /sessions/pair
+- POST /sessions/approve
+- POST /workflow/run
+- GET /health
+
+## gRPC
+
+The proto definition is in `proto/mesh.proto`.
+
+Generate code with:
 
 ```bash
-curl -X POST http://localhost:8000/agents/register \
-  -H "Content-Type: application/json" \
-  -d '{"agent_id":"researcher-1","capabilities":["research"]}'
+python -m grpc_tools.protoc -I./proto --python_out=. --grpc_python_out=. ./proto/mesh.proto
 ```
 
-Pair agents:
+## Security model
 
-```bash
-curl -X POST http://localhost:8000/sessions/pair \
-  -H "Content-Type: application/json" \
-  -d '{"agent_a":"researcher-1","agent_b":"coder-1"}'
-```
+- each agent can register an identity
+- pairing creates a shared session secret
+- all inter-agent messages are signed
+- signatures are validated before processing
+- session expiry is enforced
 
-Run workflow:
+## Production notes
 
-```bash
-curl -X POST http://localhost:8000/workflow/run \
-  -H "Content-Type: application/json" \
-  -d '{"name":"AI strategy workflow"}'
-```
+This prototype is designed for deployment and extension, with a clear path to:
+- PostgreSQL persistence
+- distributed workers
+- TLS and mTLS
+- monitoring and tracing
+- retries and dead-letter routing
