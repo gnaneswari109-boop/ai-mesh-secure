@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:6379/0"
     database_url: str = "sqlite:///./ai_mesh.db"
     debug: bool = True
+    openai_api_key: str = ""
+    gemini_api_key: str = ""
 
     class Config:
         env_file = ".env"

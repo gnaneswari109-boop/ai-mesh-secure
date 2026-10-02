@@ -5,13 +5,18 @@ services:
     build: .
     ports:
       - "8000:8000"
+      - "50051:50051"
     environment:
       APP_NAME: ai-mesh-secure
       REDIS_URL: redis://redis:6379/0
       DATABASE_URL: sqlite:///./ai_mesh.db
       DEBUG: "true"
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
     depends_on:
       - redis
+    volumes:
+      - .:/app
 
   redis:
     image: redis:7-alpine
